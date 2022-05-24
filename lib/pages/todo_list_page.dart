@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 
-class TodoListPage extends StatelessWidget {
-  const TodoListPage({Key? key}) : super(key: key);
+class TodoListPage extends StatefulWidget {
+  TodoListPage({Key? key}) : super(key: key);
+
+  @override
+  State<TodoListPage> createState() => _TodoListPageState();
+}
+
+class _TodoListPageState extends State<TodoListPage> {
+  List<String> todos = [];
+
+  final TextEditingController todoController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -16,20 +25,27 @@ class TodoListPage extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   // Ocupa o maior espaço disponível da tela
-                  const Expanded(
+                  Expanded(
                     child: TextField(
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: "Adicione uma tarefa",
                         hintText: "Ex: Estudar Flutter",
                       ),
+                      controller: todoController,
                     ),
                   ),
                   const SizedBox(
                     width: 8.0,
                   ),
                   ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        String text = todoController.text;
+                        setState(() {
+                          todos.add(text);
+                        });
+                        todoController.clear();
+                      },
                       style: ElevatedButton.styleFrom(
                         primary: const Color(0xFF00D7F3),
                         padding: const EdgeInsets.all(16.0),
@@ -41,32 +57,24 @@ class TodoListPage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 8.0),
-              ListView(
-                shrinkWrap: true,
-                children: [
-                  ListTile(
-                    title: const Text("Tarefa 1"),
-                    subtitle: const Text("20/11/2022"),
-                    leading: const Icon(
-                      Icons.save,
-                      size: 30,
-                    ),
-                    onTap: () {
-                      debugPrint("Tarefa 1");
-                    },
-                  ),
-                  ListTile(
-                    title: const Text("Tarefa 2"),
-                    subtitle: const Text("21/11/2022"),
-                    leading: const Icon(
-                      Icons.person_add,
-                      size: 30,
-                    ),
-                    onTap: () {
-                      debugPrint("Tarefa 2");
-                    },
-                  )
-                ],
+              Flexible(
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    for (String todo in todos)
+                      ListTile(
+                        title: Text(todo),
+                        subtitle: const Text("21/11/2022"),
+                        leading: const Icon(
+                          Icons.person_add,
+                          size: 30,
+                        ),
+                        onTap: () {
+                          debugPrint("Tarefa $todo");
+                        },
+                      ),
+                  ],
+                ),
               ),
               const SizedBox(height: 16.0),
               Row(
