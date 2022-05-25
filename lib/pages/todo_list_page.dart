@@ -15,79 +15,83 @@ class _TodoListPageState extends State<TodoListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Ocupa o maior espaço disponível da tela
-                  Expanded(
-                    child: TextField(
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: "Adicione uma tarefa",
-                        hintText: "Ex: Estudar Flutter",
+    return SafeArea(
+      child: Scaffold(
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: "Adicione uma tarefa",
+                          hintText: "Ex: Estudar Flutter",
+                        ),
+                        controller: todoController,
                       ),
-                      controller: todoController,
                     ),
+                    const SizedBox(
+                      width: 8.0,
+                    ),
+                    ElevatedButton(
+                        onPressed: () {
+                          String text = todoController.text;
+                          setState(() {
+                            todos.add(text);
+                          });
+                          todoController.clear();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: const Color(0xFF00D7F3),
+                          padding: const EdgeInsets.all(16.0),
+                        ),
+                        child: const Icon(
+                          Icons.add,
+                          size: 30,
+                        )),
+                  ],
+                ),
+                const SizedBox(height: 8.0),
+                Flexible(
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      for (String todo in todos)
+                        TodoListItem(
+                          title: todo,
+                        ),
+                    ],
                   ),
-                  const SizedBox(
-                    width: 8.0,
-                  ),
-                  ElevatedButton(
-                      onPressed: () {
-                        String text = todoController.text;
-                        setState(() {
-                          todos.add(text);
-                        });
-                        todoController.clear();
-                      },
+                ),
+                const SizedBox(height: 16.0),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        "Você possui ${todos.length} tarefas pendentes",
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 16.0,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {},
                       style: ElevatedButton.styleFrom(
                         primary: const Color(0xFF00D7F3),
                         padding: const EdgeInsets.all(16.0),
                       ),
-                      child: const Icon(
-                        Icons.add,
-                        size: 30,
-                      )),
-                ],
-              ),
-              const SizedBox(height: 8.0),
-              Flexible(
-                child: ListView(
-                  shrinkWrap: true,
-                  children: [
-                    for (String todo in todos) TodoListItem(),
+                      child: const Text("Limpar tudo"),
+                    )
                   ],
-                ),
-              ),
-              const SizedBox(height: 16.0),
-              Row(
-                children: [
-                  const Expanded(
-                    child: Text(
-                      "Você possui 0 tarefas pendentes",
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 16.0,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      primary: const Color(0xFF00D7F3),
-                      padding: const EdgeInsets.all(16.0),
-                    ),
-                    child: const Text("Limpar tudo"),
-                  )
-                ],
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),
