@@ -4,7 +4,7 @@ import 'package:to_do_list/pages/widgets/todo_list_item.dart';
 import '../models/todo.dart';
 
 class TodoListPage extends StatefulWidget {
-  TodoListPage({Key? key}) : super(key: key);
+  const TodoListPage({Key? key}) : super(key: key);
 
   @override
   State<TodoListPage> createState() => _TodoListPageState();
@@ -12,6 +12,8 @@ class TodoListPage extends StatefulWidget {
 
 class _TodoListPageState extends State<TodoListPage> {
   List<Todo> todos = [];
+  Todo? deletedTodo;
+  int? deletedTodoIndex;
 
   final TextEditingController todoController = TextEditingController();
 
@@ -107,8 +109,34 @@ class _TodoListPageState extends State<TodoListPage> {
   }
 
   void onDelete(Todo todo) {
+    deletedTodo = todo;
+    deletedTodoIndex = todos.indexOf(todo);
+
     setState(() {
       todos.remove(todo);
     });
+
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          "Tarefa ${todo.title} removida com sucesso",
+          style: const TextStyle(
+            color: Colors.black,
+          ),
+        ),
+        backgroundColor: Colors.grey[300],
+        action: SnackBarAction(
+          label: "Desfazer",
+          textColor: Colors.red[300],
+          onPressed: () {
+            setState(() {
+              todos.insert(deletedTodoIndex!, deletedTodo!);
+            });
+          },
+        ),
+        duration: const Duration(seconds: 3),
+      ),
+    );
   }
 }
