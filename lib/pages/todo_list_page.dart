@@ -91,7 +91,7 @@ class _TodoListPageState extends State<TodoListPage> {
                       width: 16.0,
                     ),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: showDeleteTodoConfirmationDialog,
                       style: ElevatedButton.styleFrom(
                         primary: const Color(0xFF00D7F3),
                         padding: const EdgeInsets.all(16.0),
@@ -125,10 +125,10 @@ class _TodoListPageState extends State<TodoListPage> {
             color: Colors.black,
           ),
         ),
-        backgroundColor: Colors.grey[300],
+        backgroundColor: Colors.grey[100],
         action: SnackBarAction(
           label: "Desfazer",
-          textColor: Colors.red[300],
+          textColor: Colors.red,
           onPressed: () {
             setState(() {
               todos.insert(deletedTodoIndex!, deletedTodo!);
@@ -138,5 +138,43 @@ class _TodoListPageState extends State<TodoListPage> {
         duration: const Duration(seconds: 3),
       ),
     );
+  }
+
+  void showDeleteTodoConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Limpar Tudo?"),
+        content:
+            const Text("Você tem certeza que deseja apagar todas as tarefas?"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text("cancelar"),
+            style: TextButton.styleFrom(
+              primary: const Color(0xFF00D7F3),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              deleteAllTodos();
+            },
+            child: const Text("Limpar Tudo"),
+            style: TextButton.styleFrom(
+              primary: Colors.red,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void deleteAllTodos() {
+    setState(() {
+      todos.clear();
+    });
   }
 }
