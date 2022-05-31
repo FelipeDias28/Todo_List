@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_list/pages/widgets/todo_list_item.dart';
+import 'package:to_do_list/repositories/todo_repository.dart';
 
 import '../models/todo.dart';
 
@@ -16,6 +17,7 @@ class _TodoListPageState extends State<TodoListPage> {
   int? deletedTodoIndex;
 
   final TextEditingController todoController = TextEditingController();
+  final TodoRepository todoRepository = TodoRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +57,7 @@ class _TodoListPageState extends State<TodoListPage> {
                             todos.add(newTodo);
                           });
                           todoController.clear();
+                          todoRepository.saveTodoList(todos);
                         },
                         style: ElevatedButton.styleFrom(
                           primary: const Color(0xFF00D7F3),

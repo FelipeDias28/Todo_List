@@ -6,4 +6,11 @@ class Todo {
 
   String title;
   DateTime date;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'datetime': date.toIso8601String(),
+    };
+  }
 }
