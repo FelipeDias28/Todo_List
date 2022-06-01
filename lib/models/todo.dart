@@ -4,6 +4,10 @@ class Todo {
     required this.date,
   });
 
+  Todo.fromJson(Map<String, dynamic> json)
+      : title = json["title"],
+        date = DateTime.parse(json["date"]);
+
   String title;
   DateTime date;
 
