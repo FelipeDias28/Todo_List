@@ -5,8 +5,8 @@ class Todo {
   });
 
   Todo.fromJson(Map<String, dynamic> json)
-      : title = json["title"],
-        date = DateTime.parse(json["date"]);
+      : title = json['title'],
+        date = DateTime.parse(json['datetime']);
 
   String title;
   DateTime date;
